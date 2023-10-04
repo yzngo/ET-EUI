@@ -216,6 +216,7 @@ namespace ET
           });
       }
       
+      // 防止连续点击
       public static void AddListenerAsync(this Button button, Func<ETTask> action)
       { 
           button.onClick.RemoveAllListeners();
