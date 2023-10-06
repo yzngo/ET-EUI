@@ -56,7 +56,9 @@ namespace ET
             }
 
             // 验证密码
-            if (!Regex.IsMatch(request.Password.Trim(), @"^(?=.*[0-9].*)(?=.*[A-Z].*)(?=.*[a-z].*).{6,15}$"))
+            // if (!Regex.IsMatch(request.Password.Trim(), @"^(?=.*[0-9].*)(?=.*[A-Z].*)(?=.*[a-z].*).{6,15}$"))
+            // yzn 暂时兼容在客户端把密码加密后，验证无法通过
+            if (!Regex.IsMatch(request.Password.Trim(), @"^[a-zA-Z0-9_]+$"))
             {
                 response.Error = ErrorCode.ERR_PasswordFormError;
                 reply();
@@ -107,6 +109,24 @@ namespace ET
                         account.AccountType = (int)AccountType.General;
                         // domain zone 代表区服，1服，2服，3服等
                         await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save<Account>(account);
+                    }
+                    
+                    // 查询账号中心服务器
+                    StartSceneConfig startSceneConfig = StartSceneConfigCategory.Instance.GetBySceneName(session.DomainZone(), "LoginCenter");
+                    long loginCenterInstanceId = startSceneConfig.InstanceId;
+                    var loginAccountResponse = (L2A_LoginAccountResponse) await ActorMessageSenderComponent.Instance.Call(
+                        loginCenterInstanceId, new A2L_LoginAccountRequest()
+                        {
+                            AccountId = account.Id
+                        });
+
+                    if (loginAccountResponse.Error != ErrorCode.ERR_Success)
+                    {
+                        response.Error = loginAccountResponse.Error;
+                        reply();
+                        session.Disconnect().Coroutine();
+                        account.Dispose();
+                        return;
                     }
 
                     // domain scene 代表账号服务器

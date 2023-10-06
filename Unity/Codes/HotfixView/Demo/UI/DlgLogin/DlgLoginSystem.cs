@@ -35,10 +35,10 @@ namespace ET
 					Log.Error(errorCode.ToString());
 					return;
 				}
-				else
-				{
-					// 显示登录之后的页面逻辑
-				}
+				 // 显示登录之后的页面逻辑
+				 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Login);
+				 self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Lobby);
+
 			}
 			catch (Exception e)
 			{

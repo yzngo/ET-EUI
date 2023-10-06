@@ -13,6 +13,8 @@ namespace ET
             try
             {
                 accountSession = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(address));
+                // Yzn 应该在这里验证账号密码的合法性
+                password = MD5Helper.StringMD5(password);
                 a2CLoginAccount = (A2C_LoginAccount) await accountSession.Call(new C2A_LoginAccount() { AccountName = account, Password = password });
             }
             catch (Exception e)
