@@ -2,7 +2,7 @@
 
 namespace ET
 {
-   // 供账号中心服记录登录信息
+   // 供登录中心服记录登录信息
    [ComponentOf(typeof(Scene))]
     public class LoginInfoRecordComponent: Entity, IAwake, IDestroy
     {

@@ -30,8 +30,6 @@ namespace ET
                 );
                 response.Error = g2LDisconnectGateUnit.Error;
                 reply();
-
-
             }
             await Task.CompletedTask;
         }
