@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ET.Handler
+namespace ET
 {
     [FriendClassAttribute(typeof(ET.ServerInfoManagerComponent))]    // 账号服务器处理客户端获取区服信息的请求
     public class C2A_GetServerInfosHandler : AMRpcHandler<C2A_GetServerInfos, A2C_GetServerInfos>
